@@ -20,7 +20,7 @@ public class PaymentController {
     private PaymentService paymentService;
 
     @Autowired
-    Environment env;
+    private Environment env;
 
     @PostMapping
     public PaymentResponse createPayment(@RequestBody PaymentRequest paymentRequest){
