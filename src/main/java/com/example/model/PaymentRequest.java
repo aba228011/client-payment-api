@@ -14,7 +14,7 @@ public class PaymentRequest {
 
     private String clientId;
 
-    private String paymentDate;
+    private Date paymentDate;
 
     private double paymentAmount;
 

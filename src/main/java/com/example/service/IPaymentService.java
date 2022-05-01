@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 public interface IPaymentService {
@@ -19,7 +20,7 @@ public interface IPaymentService {
 
     Page<PaymentResponse> getPaymentsByClientId(String clientId, Pageable pageable);
 
-    Page<PaymentResponse> getPaymentsByDate(String date, Pageable pageable) throws ParseException;
+    Page<PaymentResponse> getPaymentsByDate(Date date, Pageable pageable) throws ParseException;
 
     List<PaymentResponse> getAllPayments();
 }

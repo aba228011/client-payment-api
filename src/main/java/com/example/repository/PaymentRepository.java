@@ -14,7 +14,7 @@ public interface PaymentRepository extends ElasticsearchRepository<PaymentEntity
 
     Page<PaymentEntity> getPaymentEntityByClientId(String clientId, Pageable pageable);
 
-    Page<PaymentEntity> getPaymentEntityByPaymentDate(String data, Pageable pageable);
+    Page<PaymentEntity> getPaymentEntityByPaymentDate(Date data, Pageable pageable);
 
     void deletePaymentEntitiesByPaymentId(String paymentId);
 

@@ -14,7 +14,7 @@ public class PaymentResponse {
 
     private String clientId;
 
-    private String paymentDate;
+    private Date paymentDate;
 
     private double paymentAmount;
 

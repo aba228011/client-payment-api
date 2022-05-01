@@ -10,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -43,9 +45,19 @@ public class PaymentController {
         return paymentService.getPaymentsByClientId(clientId, pageable);
     }
 
-    @GetMapping("/date")
-    public Page<PaymentResponse> getPaymentByDate(@RequestParam String date, Pageable pageable) throws ParseException {
-        return paymentService.getPaymentsByDate(date, pageable);
+    @GetMapping("/date/{date}")
+    public Page<PaymentResponse> getPaymentByDate(@PathVariable String date, Pageable pageable) {
+        try {
+            String pattern = "yyyy-MM-dd";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+            Date dateToRepo = simpleDateFormat.parse(date);
+
+            return paymentService.getPaymentsByDate(dateToRepo, pageable);
+
+        } catch (ParseException parseException) {
+            return null;
+        }
     }
 
     @GetMapping("/all")

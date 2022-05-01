@@ -13,7 +13,7 @@ public class ElasticConfig extends AbstractElasticsearchConfiguration {
         ClientConfiguration clientConfiguration = ClientConfiguration.builder()
                 .connectedTo("payment-depl.es.us-central1.gcp.cloud.es.io:9243")
                 .usingSsl()
-                .withBasicAuth("elastic", " tt4Y7Q62E3ali674hOmLwIYG")
+                .withBasicAuth("elastic", "tt4Y7Q62E3ali674hOmLwIYG")
                 .build();
 
         return RestClients.create(clientConfiguration).rest();
