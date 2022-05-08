@@ -18,7 +18,7 @@ public interface IPaymentService {
 
     void deleteByPaymentId(String paymentId);
 
-    Page<PaymentResponse> getPaymentsByClientId(String clientId, Pageable pageable);
+    List<PaymentResponse> getPaymentsByClientId(String clientId);
 
     Page<PaymentResponse> getPaymentsByDate(Date date, Pageable pageable) throws ParseException;
 

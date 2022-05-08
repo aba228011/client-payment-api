@@ -12,7 +12,7 @@ import java.util.List;
 public interface PaymentRepository extends ElasticsearchRepository<PaymentEntity, String> {
     PaymentEntity getPaymentEntityByPaymentId(String paymentId);
 
-    Page<PaymentEntity> getPaymentEntityByClientId(String clientId, Pageable pageable);
+    List<PaymentEntity> getPaymentEntitiesByClientId(String clientId);
 
     Page<PaymentEntity> getPaymentEntityByPaymentDate(Date data, Pageable pageable);
 

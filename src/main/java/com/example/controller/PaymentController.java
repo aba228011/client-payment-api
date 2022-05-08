@@ -41,8 +41,8 @@ public class PaymentController {
     }
 
     @GetMapping("/client")
-    public Page<PaymentResponse> getPaymentByClientId(@RequestParam String clientId, Pageable pageable) {
-        return paymentService.getPaymentsByClientId(clientId, pageable);
+    public List<PaymentResponse> getPaymentByClientId(@RequestParam String clientId) {
+        return paymentService.getPaymentsByClientId(clientId);
     }
 
     @GetMapping("/date/{date}")
@@ -67,6 +67,6 @@ public class PaymentController {
 
     @GetMapping("/check")
     public String checkController() {
-        return "post-core-api is working at " + env.getProperty("local.server.port");
+        return "client-payment-api is working at " + env.getProperty("local.server.port");
     }
 }

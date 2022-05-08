@@ -14,7 +14,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(indexName = "payment")
+@Document(indexName = "payment_t")
 public class PaymentEntity {
     @Id
     @Field(type = FieldType.Keyword)

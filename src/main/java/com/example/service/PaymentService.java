@@ -60,10 +60,10 @@ public class PaymentService implements IPaymentService {
     }
 
     @Override
-    public Page<PaymentResponse> getPaymentsByClientId(String clientId, Pageable pageable) {
-        return paymentRepository.getPaymentEntityByClientId(clientId, pageable).map(
+    public List<PaymentResponse> getPaymentsByClientId(String clientId) {
+        return paymentRepository.getPaymentEntitiesByClientId(clientId).stream().map(
                 el -> modelMapper.map(el, PaymentResponse.class)
-        );
+        ).collect(Collectors.toList());
     }
 
     @Override
