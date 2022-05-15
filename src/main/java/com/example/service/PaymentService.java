@@ -2,6 +2,7 @@ package com.example.service;
 
 import com.example.model.PaymentRequest;
 import com.example.model.PaymentResponse;
+import com.example.model.ServiceClass;
 import com.example.repository.PaymentEntity;
 import com.example.repository.PaymentRepository;
 import org.modelmapper.ModelMapper;
@@ -11,11 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,25 +28,51 @@ public class PaymentService implements IPaymentService {
     }
 
     @Override
-    public PaymentResponse createPayment(PaymentRequest paymentRequest) {
-        paymentRequest.setPaymentId(UUID.randomUUID().toString());
+    public List<PaymentResponse> createPayment(PaymentRequest paymentRequest) {
+        List<PaymentResponse> paymentResponses = new ArrayList<>();
+        if (paymentRequest.getTypeOfServices().length > 0) {
+            for (ServiceClass item: paymentRequest.getTypeOfServices()) {
+                PaymentEntity paymentEntity = new PaymentEntity();
+                paymentEntity.setPaymentId(paymentRequest.getPaymentId());
+                // prepare paymentEntity for save
+                paymentEntity.setClientId(paymentRequest.getClientId());
+                paymentEntity.setPaymentDate(paymentRequest.getPaymentDate());
 
-        PaymentEntity paymentEntity = modelMapper.map(paymentRequest, PaymentEntity.class);
+                // item set
+                paymentEntity.setCodeService(item.getCodeService());
+                paymentEntity.setPriceService(item.getPriceService());
 
-        paymentEntity = paymentRepository.save(paymentEntity);
-
-        return modelMapper.map(paymentEntity, PaymentResponse.class);
+                paymentRepository.save(paymentEntity);
+                paymentResponses.add(modelMapper.map(paymentEntity, PaymentResponse.class));
+            }
+        }
+        return paymentResponses;
     }
 
     @Override
-    public PaymentResponse updatePayment(PaymentRequest paymentRequest) {
-        PaymentEntity paymentEntity = modelMapper.map(paymentRequest, PaymentEntity.class);
+    public List<PaymentResponse> updatePayment(PaymentRequest paymentRequest) {
+        List<PaymentResponse> paymentResponses = new ArrayList<>();
+        if (paymentRequest.getTypeOfServices().length > 0) {
 
-        PaymentEntity dbEntity = paymentRepository.getPaymentEntityByPaymentId(paymentRequest.getPaymentId());
+            for (ServiceClass item: paymentRequest.getTypeOfServices()) {
+                PaymentEntity paymentEntity = new PaymentEntity();
 
-        paymentEntity.setPaymentId(dbEntity.getPaymentId());
+                PaymentEntity dbEntity = paymentRepository.getPaymentEntityByPaymentId(paymentRequest.getPaymentId());
 
-        return modelMapper.map(paymentEntity, PaymentResponse.class);
+                paymentEntity.setPaymentId(dbEntity.getPaymentId());
+                // prepare paymentEntity for save
+                paymentEntity.setClientId(paymentRequest.getClientId());
+                paymentEntity.setPaymentDate(paymentRequest.getPaymentDate());
+
+                // item set
+                paymentEntity.setCodeService(item.getCodeService());
+                paymentEntity.setPriceService(item.getPriceService());
+
+                paymentRepository.save(paymentEntity);
+                paymentResponses.add(modelMapper.map(paymentEntity, PaymentResponse.class));
+            }
+        }
+        return paymentResponses;
     }
 
     @Override
@@ -69,13 +92,6 @@ public class PaymentService implements IPaymentService {
     @Override
     public void deleteByPaymentId(String paymentId) {
         paymentRepository.deletePaymentEntitiesByPaymentId(paymentId);
-    }
-
-    @Override
-    public Page<PaymentResponse> getPaymentsByDate(Date date, Pageable pageable) {
-        return paymentRepository.getPaymentEntityByPaymentDate(date, pageable).map(
-                el -> modelMapper.map(el, PaymentResponse.class)
-        );
     }
 
     @Override

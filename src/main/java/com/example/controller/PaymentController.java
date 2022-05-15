@@ -3,16 +3,15 @@ package com.example.controller;
 import com.example.model.PaymentRequest;
 import com.example.model.PaymentResponse;
 import com.example.service.PaymentService;
+import com.example.service.SendMessage;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/payment")
@@ -24,13 +23,21 @@ public class PaymentController {
     @Autowired
     private Environment env;
 
+    @Autowired
+    private SendMessage sendMessage;
+
+    ObjectMapper objectMapper = new ObjectMapper();
+
     @PostMapping
-    public PaymentResponse createPayment(@RequestBody PaymentRequest paymentRequest){
-        return paymentService.createPayment(paymentRequest);
+    public List<PaymentResponse> createPayment(@RequestBody PaymentRequest paymentRequest) throws JsonProcessingException {
+        paymentRequest.setPaymentId(UUID.randomUUID().toString());
+        List<PaymentResponse> paymentResponses =  paymentService.createPayment(paymentRequest);
+        sendMessage.send(objectMapper.writeValueAsString(paymentRequest));
+        return paymentResponses;
     }
 
     @PutMapping
-    public PaymentResponse updatePayment(@RequestParam String paymentId, @RequestBody PaymentRequest paymentRequest) {
+    public List<PaymentResponse> updatePayment(@RequestParam String paymentId, @RequestBody PaymentRequest paymentRequest) {
         paymentRequest.setPaymentId(paymentId);
         return paymentService.updatePayment(paymentRequest);
     }
@@ -43,21 +50,6 @@ public class PaymentController {
     @GetMapping("/client")
     public List<PaymentResponse> getPaymentByClientId(@RequestParam String clientId) {
         return paymentService.getPaymentsByClientId(clientId);
-    }
-
-    @GetMapping("/date/{date}")
-    public Page<PaymentResponse> getPaymentByDate(@PathVariable String date, Pageable pageable) {
-        try {
-            String pattern = "yyyy-MM-dd";
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-
-            Date dateToRepo = simpleDateFormat.parse(date);
-
-            return paymentService.getPaymentsByDate(dateToRepo, pageable);
-
-        } catch (ParseException parseException) {
-            return null;
-        }
     }
 
     @GetMapping("/all")

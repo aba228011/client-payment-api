@@ -14,7 +14,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(indexName = "payment_t")
+@Document(indexName = "payment_table")
 public class PaymentEntity {
     @Id
     @Field(type = FieldType.Keyword)
@@ -26,9 +26,9 @@ public class PaymentEntity {
     @Field(type = FieldType.Date)
     private Date paymentDate;
 
-    @Field(type = FieldType.Double)
-    private double paymentAmount;
-
     @Field(type = FieldType.Text)
-    private String typeOfServices;
+    private String codeService;
+
+    @Field(type = FieldType.Double)
+    private double priceService;
 }

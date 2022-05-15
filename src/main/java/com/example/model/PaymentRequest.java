@@ -16,7 +16,5 @@ public class PaymentRequest {
 
     private Date paymentDate;
 
-    private double paymentAmount;
-
-    private String typeOfServices;
+    private ServiceClass[] typeOfServices;
 }

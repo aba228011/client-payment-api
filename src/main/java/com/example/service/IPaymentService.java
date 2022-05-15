@@ -10,17 +10,15 @@ import java.util.Date;
 import java.util.List;
 
 public interface IPaymentService {
-    PaymentResponse createPayment(PaymentRequest paymentRequest);
+    List<PaymentResponse> createPayment(PaymentRequest paymentRequest);
 
-    PaymentResponse updatePayment(PaymentRequest paymentRequest);
+    List<PaymentResponse> updatePayment(PaymentRequest paymentRequest);
 
     PaymentResponse getPaymentByPaymentId(String paymentId);
 
     void deleteByPaymentId(String paymentId);
 
     List<PaymentResponse> getPaymentsByClientId(String clientId);
-
-    Page<PaymentResponse> getPaymentsByDate(Date date, Pageable pageable) throws ParseException;
 
     List<PaymentResponse> getAllPayments();
 }
